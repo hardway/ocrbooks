@@ -5,7 +5,7 @@
 
 ```
 cd 目录
-pandoc *.md -o 书本.epub
+pandoc --from markdown+east_asian_line_breaks *.md -o 书本.epub
 ```
 
 ### 现有书目
