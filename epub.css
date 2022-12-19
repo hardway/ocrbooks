@@ -123,6 +123,7 @@ table {
   margin: 1em 0;
   border-collapse: collapse;
   width: 100%;
+  font-size: 80%;
   overflow-x: auto;
   display: block;
 }
