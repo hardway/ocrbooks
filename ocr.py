@@ -1,14 +1,17 @@
 import os
 import sys
+import pypdfium2 as pdfium
 
 if len(sys.argv)<2 :
     exit(f"Usage: python3 {sys.argv[0]} PDF")
 
-pdf=sys.argv[1]
+# 打开PDF
+print(f"Opening PDF: {sys.argv[1]}")
+pdf = pdfium.PdfDocument(sys.argv[1])
+pages=len(pdf)
 
-pages=os.popen(f"exiftool \"{pdf}\" | grep 'Page Count' | cut -f 2 -d:").read()
-pages=int(pages);
-
+# 加载Paddle OCR
+print(f"Loading OCR Engine ...");
 from paddleocr import PaddleOCR
 from ppocr.utils.logging import get_logger
 get_logger().setLevel(40)
@@ -19,13 +22,14 @@ ocr = PaddleOCR(
         lang="ch"
 )  # need to run only once to download and load model into memory
 
+# 逐页识别
 for i in range(pages):
     print(f"\n---- page {i} ----\n")
 
     img_path = f"./c-{i}.jpg"
 
     if not os.path.exists(img_path):
-        os.system(f"convert -density 300 {pdf}[{i}] {img_path}")
+        pdf[i].render(scale = 600/72).to_pil().save(img_path)
 
     result = ocr.ocr(img_path, cls=True)
 

@@ -1,1 +1,2 @@
 paddleocr==2.6.0.1
+pypdfium2==4.18.0
